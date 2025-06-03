@@ -57,6 +57,36 @@ export class VehicleController {
         });
     }
 
+    async buscarPorId(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply
+    ) {
+        try {
+            const id = Number(request.params.id);
+            const vehicle = await prisma.vehicle.findUnique({ where: { id } });
+            if (!vehicle) {
+                return reply.status(404).send({
+                    message: 'Veículo não encontrado.'
+                });
+            }
+            return reply.status(200).send({
+                message: 'Veículo encontrado com sucesso.',
+                vehicle
+            })
+        } catch (error) {
+            if (error instanceof Error) {
+                return reply.status(400).send({
+                    message: error.message
+                });
+            }
+            return reply.status(500).send({
+                message: 'Erro interno do servidor.'
+            });
+        }
+
+
+
+
+
+    }
 
 
 }

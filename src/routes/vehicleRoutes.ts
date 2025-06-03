@@ -8,4 +8,5 @@ export function vehicleRoutes(app: FastifyInstance) {
     app.addHook('onRequest', authMiddleware);
     app.post('/', vehicleController.criarVeiculo);
     app.get('/', vehicleController.buscarTodos);
+    app.get('/:id', vehicleController.buscarPorId);
 }
