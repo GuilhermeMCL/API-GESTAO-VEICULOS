@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { vehicleSchema } from "../validations/vehicleSchema";
+import { InputVehicleParcial, parcialVehicleSchema, vehicleSchema } from "../validations/vehicleSchema";
 import { prisma } from "../lib/prisma";
+import { error } from "console";
 
 export class VehicleController {
     async criarVeiculo(request: FastifyRequest, reply: FastifyReply) {
@@ -81,12 +82,66 @@ export class VehicleController {
                 message: 'Erro interno do servidor.'
             });
         }
+    }
+    async atualizarVeiculo(request: FastifyRequest<{ Params: { id: string }; Body: InputVehicleParcial }>, reply: FastifyReply) {
 
+        try {
+            const data = parcialVehicleSchema.parse(request.body);
+            const id = Number(request.params.id);
+            if (data.vin) {
+                const vehicleExistente = await prisma.vehicle.findUnique({
+                    where: {
+                        vin: data.vin,
+                        NOT: {
+                            id
+                        }
+                    }
+                });
+                if (vehicleExistente) {
+                    return reply.status(400).send({
+                        message: 'Vin Ja registrado POR OUTRO VEICULO .'
+                    });
+                }
+                if (data.data_fabricacao && data.data_entrega && data.data_fabricacao > data.data_entrega) {
+                    return reply.status(400).send({
+                        message: 'Data de fabricação não pode ser maior que a data de entrega.'
+                    });
+                }
+                if (data.data_fabricacao && data.data_venda && data.data_fabricacao > data.data_venda) {
+                    return reply.status(400).send({
+                        message: 'Data de fabricação não pode ser maior que a data de venda.'
+                    });
+                }
+                if (data.data_ultimo_reparo && data.data_fabricacao && data.data_ultimo_reparo < data.data_fabricacao) {
+                    return reply.status(400).send({
+                        message: 'Data do último reparo não pode ser menor que a data de fabricação.'
+                    });
+                }
+                if (data.data_ultimo_reparo && data.data_fabricacao && data.data_ultimo_reparo < data.data_fabricacao) {
+                    return reply.status(400).send({
+                        message: 'Data do último reparo não pode ser menor que a data de fabricação.'
+                    });
+                }
+                const vehicle = await prisma.vehicle.update({
+                    where: { id },
+                    data
+                })
+                return reply.status(200).send({
+                    message: 'Veículo atualizado com sucesso.',
+                    vehicle
+                });
 
-
-
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                return reply.status(400).send({
+                    message: error.message
+                });
+            }
+            return reply.status(500).send({
+                message: 'Erro interno do servidor.'
+            });
+        }
 
     }
-
-
 }

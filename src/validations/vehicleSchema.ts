@@ -20,3 +20,4 @@ export const vehicleSchema = z.object({
 })
 
 export const parcialVehicleSchema = vehicleSchema.partial()
+export type InputVehicleParcial = z.infer<typeof parcialVehicleSchema>;
