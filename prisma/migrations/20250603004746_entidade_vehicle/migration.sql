@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Veiculo" (
+CREATE TABLE "Vehicle" (
     "id" SERIAL NOT NULL,
     "vin" TEXT NOT NULL,
     "placa" TEXT NOT NULL,
@@ -13,11 +13,11 @@ CREATE TABLE "Veiculo" (
     "documento_proprietario" TEXT NOT NULL,
     "ultima_atualizacao" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Veiculo_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Vehicle_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Veiculo_vin_key" ON "Veiculo"("vin");
+CREATE UNIQUE INDEX "Vehicle_vin_key" ON "Vehicle"("vin");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Veiculo_placa_key" ON "Veiculo"("placa");
+CREATE UNIQUE INDEX "Vehicle_placa_key" ON "Vehicle"("placa");
