@@ -7,7 +7,7 @@ function documentoValido(doc: string): boolean {
 export const vehicleSchema = z.object({
     vin: z.string().min(1),
     placa: z.string().min(1),
-    module: z.string().min(1),
+    modelo: z.string().min(1),
     data_entrega: z.coerce.date(),
     data_fabricacao: z.coerce.date(),
     data_venda: z.coerce.date(),
