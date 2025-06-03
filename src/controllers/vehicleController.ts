@@ -48,4 +48,15 @@ export class VehicleController {
             });
         }
     }
+
+    async buscarTodos(request: FastifyRequest, reply: FastifyReply) {
+        const vehicles = await prisma.vehicle.findMany();
+        return reply.status(200).send({
+            message: 'Veículos encontrados com sucesso.',
+            vehicles
+        });
+    }
+
+
+
 }
