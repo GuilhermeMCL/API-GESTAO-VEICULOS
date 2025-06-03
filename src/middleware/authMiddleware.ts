@@ -1,12 +1,11 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { env } from "../env";
 
-export function authMiddleware(request: FastifyRequest, reply: FastifyReply) {
-    const token = request.headers.authorization;
 
-    if (!token || token !== env.BEARER_TOKEN) {
-        return reply.status(401).send({
-            message: 'Unauthorized'
-        });
+export async function authMiddleware(req: FastifyRequest, reply: FastifyReply) {
+    const token = req.headers.authorization;
+    const expected = `Bearer ${process.env.API_TOKEN}`;
+
+    if (token !== expected) {
+        return reply.status(401).send({ error: 'Unauthorized' });
     }
 }
