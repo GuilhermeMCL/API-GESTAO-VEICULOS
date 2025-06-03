@@ -10,5 +10,6 @@ export function vehicleRoutes(app: FastifyInstance) {
     app.get('/', vehicleController.buscarTodos);
     app.get('/:id', vehicleController.buscarPorId);
     app.put('/:id', vehicleController.atualizarVeiculo);
+    app.delete('/:id', vehicleController.deletarVeiculo);
 
 }
