@@ -27,12 +27,25 @@ export class VehicleController {
                     message: 'Data do último reparo não pode ser menor que a data de fabricação.'
                 });
             }
+            return reply.status(201).send({
+                message: 'Veículo criado com sucesso.',
+                vehicle: await prisma.vehicle.create({
+                    data: vehicleData
+                })
 
-
+            }
+            )
 
 
         } catch (error) {
-
+            if (error instanceof Error) {
+                return reply.status(400).send({
+                    message: error.message
+                });
+            }
+            return reply.status(500).send({
+                message: 'Erro interno do servidor.'
+            });
         }
     }
 }
